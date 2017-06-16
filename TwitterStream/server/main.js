@@ -12,7 +12,14 @@ var T = new Twit({
   access_token:         '868161804253495296-EMbfwyvLTYpfjBgyCw9URUd0SWlEPMk',
   access_token_secret:  '8D2KC24kRxqDqFVoIcJciYQzFXNyE7xUrJV22cE5uw4eo',
 })
-
+/*
 T.post('statuses/update', { status: 'hello world!' }, function(err, data, response) {
   console.log(data)
 })
+*/
+
+var r1 = sentiment('Cats are stupid.');
+console.dir(r1);        // Score: -2, Comparative: -0.666
+
+var r2 = sentiment('Cats are totally amazing!');
+console.dir(r2);        // Score: 4, Comparative: 1
