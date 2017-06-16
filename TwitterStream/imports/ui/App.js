@@ -8,7 +8,7 @@ export default class App extends React.Component {
     return (
       <div>
         <TitleBar title={this.props.title} subtitle="Created by Chris Iwasaki"/>
-        <TweetList/>
+        <TweetList tweets={this.props.tweets}/>
         <Statistics/>
       </div>
     );

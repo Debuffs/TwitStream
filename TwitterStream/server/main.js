@@ -20,9 +20,31 @@ Meteor.startup(() => {
 
   let stream = T.stream('statuses/filter', { track: 'Home Depot' })
 
-  var wrappedInsert = Meteor.bindEnvironment(function(tweet) {
-    Tweets.insert(tweet);
+  var wrappedInsert = Meteor.bindEnvironment(function(tweet, sentiment) {
+    Tweets.insert({
+      createdDate: tweet.created_at,
+      text: tweet.text,
+      score: sentiment.score,
+      comparativeScore: sentiment.comparative,
+      name: tweet.user.name,
+      screen_name: tweet.user.screen_name,
+      propic: tweet.user.profile_image_url
+    });
   }, "Failed");
+  var recent = Meteor.bindEnvironment(function() {
+      var options = {
+      "limit": 10,
+      "sort": {created_at: -1}
+      }
+
+      let recentTweets = Tweets.find({}, options)
+      //tweetlistfinal = recentTweets.map((player))
+      console.log('Recent 10 Tweets' + recentTweets.length)
+  }, "Failed");
+
+
+
+
 
   stream.on('tweet', function (tweet) {
     let r1 = sentiment(tweet.text);
@@ -30,8 +52,9 @@ Meteor.startup(() => {
     console.log('TWITTER TWEET:' + tweet.text)
     console.log('SCREEN NAME:' + tweet.user.screen_name)
     console.log('SENTIMENT SCORE:' + r1.score)
-
-    wrappedInsert(tweet);
+    console.log('COMPARATIVE SCORE:' + r1.comparative)
+    recent();
+    wrappedInsert(tweet, r1);
   })
 
   // code to run on server at startup
